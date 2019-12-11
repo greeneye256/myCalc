@@ -11,15 +11,14 @@
 <VBox styleClass="main" fx:controller="sample.Controller"
       xmlns:fx="http://javafx.com/fxml">
     <TextArea fx:id="result" styleClass="textArea" minHeight="80" minWidth="280" maxHeight="80" maxWidth="280" mouseTransparent="true" focusTraversable="false" editable="false">0</TextArea>
-    <TextArea fx:id="currentResult" styleClass="textArea" minHeight="80" minWidth="280" maxHeight="80" maxWidth="280" mouseTransparent="true" focusTraversable="false" editable="false">0</TextArea>
     <GridPane alignment="CENTER">
-        <Button GridPane.columnIndex="1" GridPane.rowIndex="1">%</Button>
+        <Button onAction="#equations" GridPane.columnIndex="1" GridPane.rowIndex="1">%</Button>
         <Button GridPane.columnIndex="2" GridPane.rowIndex="1">CE</Button>
-        <Button GridPane.columnIndex="3" GridPane.rowIndex="1">C</Button>
+        <Button onAction="#equations" GridPane.columnIndex="3" GridPane.rowIndex="1">C</Button>
         <Button GridPane.columnIndex="4" GridPane.rowIndex="1">⌫</Button>
-        <Button GridPane.columnIndex="1" GridPane.rowIndex="2">1/x</Button>
-        <Button GridPane.columnIndex="2" GridPane.rowIndex="2">x^2</Button>
-        <Button GridPane.columnIndex="3" GridPane.rowIndex="2">√x</Button>
+        <Button onAction="#equations" GridPane.columnIndex="1" GridPane.rowIndex="2">1/x</Button>
+        <Button onAction="#equations" GridPane.columnIndex="2" GridPane.rowIndex="2">x^2</Button>
+        <Button onAction="#equations" GridPane.columnIndex="3" GridPane.rowIndex="2">√x</Button>
         <Button onAction="#operate" GridPane.columnIndex="4" GridPane.rowIndex="2">/</Button>
         <Button onAction="#numberPressed" styleClass="numbers" GridPane.columnIndex="1" GridPane.rowIndex="3">7</Button>
         <Button onAction="#numberPressed" styleClass="numbers" GridPane.columnIndex="2" GridPane.rowIndex="3">8</Button>
@@ -33,9 +32,9 @@
         <Button onAction="#numberPressed" styleClass="numbers" GridPane.columnIndex="2" GridPane.rowIndex="5">2</Button>
         <Button onAction="#numberPressed" styleClass="numbers" GridPane.columnIndex="3" GridPane.rowIndex="5">3</Button>
         <Button onAction="#operate" GridPane.columnIndex="4" GridPane.rowIndex="5">+</Button>
-        <Button GridPane.columnIndex="1" GridPane.rowIndex="6">-/+</Button>
+        <Button onAction="#equations" GridPane.columnIndex="1" GridPane.rowIndex="6">-/+</Button>
         <Button onAction="#numberPressed" styleClass="numbers" GridPane.columnIndex="2" GridPane.rowIndex="6">0</Button>
-        <Button GridPane.columnIndex="3" GridPane.rowIndex="6">.</Button>
-        <Button GridPane.columnIndex="4" GridPane.rowIndex="6">=</Button>
+        <Button onAction="#numberPressed" GridPane.columnIndex="3" GridPane.rowIndex="6">.</Button>
+        <Button onAction="#operate" GridPane.columnIndex="4" GridPane.rowIndex="6">=</Button>
     </GridPane>
 </VBox>

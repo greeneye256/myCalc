@@ -13,7 +13,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         VBox root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        Scene scene = new Scene(root,240,520);
+        Scene scene = new Scene(root,240,440);
         scene.getStylesheets().add("sample/style.css");
         primaryStage.setScene(scene);
         primaryStage.setTitle("My Calculator");
