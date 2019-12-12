@@ -91,7 +91,7 @@ public class Controller {
                 displayedValue.setText("0");
                 break;
             case "\u232b":
-                if (operator == null) {
+                if (operator == null && !lastKeyPressedIsEquals) {
                     if (currentDisplayedValue.length() == 1) {
                         displayedValue.setText("0");
                     } else {
