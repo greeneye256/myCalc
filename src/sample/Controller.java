@@ -7,91 +7,98 @@ import javafx.scene.control.TextArea;
 public class Controller {
     private String operator = null;
     private String retainedOperator = null;
-    boolean equalsIsActive = false;
-    private double calcResult = 0;
-    public TextArea result;
+    private boolean lastKeyPressedIsEquals = false;
+    private double memoryResult = 0;
+    public TextArea displayedValue;
 
-    public void numberPressed(ActionEvent event) {
-        if (equalsIsActive) {
-            calcResult = 0;
-            equalsIsActive = false;
-            result.setText("0");
+    public void handleNumberKeys(ActionEvent event) {
+
+        if (lastKeyPressedIsEquals) {
+            memoryResult = 0;
+            lastKeyPressedIsEquals = false;
+            displayedValue.setText("0");
         }
+
         Button button = (Button) event.getSource();
-        if (button.getText().equals(".")) {
-            if (result.getText().contains(button.getText())) {
+        String keyPressed = button.getText();
+        String currentDisplayedValue = displayedValue.getText();
+
+        if (keyPressed.equals(".")) {
+            if (currentDisplayedValue.contains(".")) {
                 return;
             }
-            result.setText(result.getText() + ".");
+            displayedValue.setText(currentDisplayedValue + ".");
             return;
         }
         if (operator == null) {
-            if (result.getText().length() < 13) {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(result.getText());
-                if (stringBuilder.toString().equals("0")) {
-                    stringBuilder.setLength(0);
-                    stringBuilder.append(button.getText());
-                } else {
-                    stringBuilder.append(button.getText());
-                }
-                result.setText(stringBuilder.toString());
-            }
+
+            displayedValue.setText(appendDigitToNumber(keyPressed, currentDisplayedValue));
+
         } else {
             retainedOperator = operator;
             operator = null;
-            calcResult = Double.parseDouble(result.getText());
-            result.setText(button.getText());
+            memoryResult = getDoubleFromString(currentDisplayedValue);
+            displayedValue.setText(keyPressed);
         }
     }
 
-    public void equations(ActionEvent event) {
+    public void handleFunctionKeys(ActionEvent event) {
         Button button = (Button) event.getSource();
-        double currentResult = 0;
-        switch (button.getText()) {
+        String keyPressed = button.getText();
+        Double currentValue = getDoubleFromString(displayedValue.getText());
+        double result = 0;
+        switch (keyPressed) {
+            case "1/x":
+                result = 1 / currentValue;
+                break;
+            case "x^2":
+                result = currentValue * currentValue;
+                break;
+            case "\u221Ax":
+                result = Math.sqrt(currentValue);
+                break;
+            case "%":
+                if (operator == null) {
+                    result = (memoryResult * currentValue) / 100;
+                }
+                break;
+            case "-/+":
+                result = -currentValue;
+                break;
+
+        }
+        displayedValue.setText(beautifyDouble(result));
+
+    }
+
+    public void handleUtilKey(ActionEvent event) {
+        Button button = (Button) event.getSource();
+        String keyPressed = button.getText();
+        String currentDisplayedValue = displayedValue.getText();
+
+        switch (keyPressed) {
             case "C":
                 operator = null;
-                calcResult = 0;
+                memoryResult = 0;
                 retainedOperator = null;
-                result.setText("0");
+                displayedValue.setText("0");
                 break;
             case "CE":
                 if (operator != null) {
                     retainedOperator = operator;
                     operator = null;
                 }
-                result.setText("0");
+                displayedValue.setText("0");
                 break;
             case "\u232b":
                 if (operator == null) {
-                    if (result.getText().length() == 1) {
-                        result.setText("0");
+                    if (currentDisplayedValue.length() == 1) {
+                        displayedValue.setText("0");
                     } else {
-                        result.setText(result.getText().substring(0, result.getText().length() - 1));
+                        displayedValue.setText(currentDisplayedValue.substring(0, currentDisplayedValue.length() - 1));
                     }
                 }
-                return;
-            case "1/x":
-                currentResult = 1 / Double.parseDouble(result.getText());
-                break;
-            case "x^2":
-                currentResult = Double.parseDouble(result.getText()) * Double.parseDouble(result.getText());
-                break;
-            case "\u221Ax":
-                currentResult = Math.sqrt(Double.parseDouble(result.getText()));
-                break;
-            case "%":
-                if (operator == null) {
-                    currentResult = (calcResult * Double.parseDouble(result.getText())) / 100;
-                }
-                break;
-            case "-/+":
-                currentResult = -Double.parseDouble(result.getText());
-                break;
-
         }
-        result.setText(beautifyDouble(currentResult));
-
     }
 
     private String beautifyDouble(Double number) {
@@ -114,56 +121,58 @@ public class Controller {
         return myStringNumber;
     }
 
-    //throw arritmetic exception
-    public Double calculate(String operator,Double d1,Double d2){
-        switch (operator){
+    public void handleBasicOperations(ActionEvent event) {
+        lastKeyPressedIsEquals = false;
+        Button button = (Button) event.getSource();
+        operator = button.getText();
+
+
+        if (retainedOperator == null) {
+            memoryResult = getDoubleFromString(displayedValue.getText());
+        } else {
+
+            if (operator.equals("=")) {
+                lastKeyPressedIsEquals = true;
+                displayedValue.setText(beautifyDouble(calculate(retainedOperator, memoryResult, getDoubleFromString(displayedValue.getText()))));
+                memoryResult = getDoubleFromString(displayedValue.getText());
+                operator = null;
+                retainedOperator = null;
+            } else {
+                displayedValue.setText(beautifyDouble(calculate(retainedOperator, memoryResult, getDoubleFromString(displayedValue.getText()))));
+                retainedOperator = null;
+            }
+        }
+    }
+
+    private Double calculate(String operator, Double d1, Double d2) {
+        switch (operator) {
             case "+":
-                return d1+d2;
+                return d1 + d2;
             case "-":
-                return d1-d2;
+                return d1 - d2;
             case "/":
-                return d1/d2;
+                return d1 / d2;
             case "*":
-                return d1*d2;
+                return d1 * d2;
         }
         return 0d;
     }
 
-    public void operate(ActionEvent event) {
-        Button button = (Button) event.getSource();
-        operator = button.getText();
-
-        if (retainedOperator == null) {
-            calcResult = Double.parseDouble(result.getText());
-        } else {
-            switch (retainedOperator) {
-                case "+":
-                    equalsIsActive = false;
-                    calcResult = calcResult + Double.parseDouble(result.getText());
-                    break;
-                case "-":
-                    equalsIsActive = false;
-                    calcResult = calcResult - Double.parseDouble(result.getText());
-                    break;
-                case "*":
-                    equalsIsActive = false;
-                    calcResult = calcResult * Double.parseDouble(result.getText());
-                    break;
-                case "/":
-                    equalsIsActive = false;
-                    calcResult = calcResult / Double.parseDouble(result.getText());
-                    break;
+    private String appendDigitToNumber(String digit, String number) {
+        if (number.length() < 13) {
+            if (number.equals("0.")) {
+                return number + digit;
             }
-            if (operator.equals("=")){
-                equalsIsActive = true;
-                result.setText(beautifyDouble(calcResult));
-                calcResult = 0;
-                operator = null;
-                retainedOperator = null;
-                return;
+            if (getDoubleFromString(number) == 0) {
+                return digit;
             }
-            result.setText(beautifyDouble(calcResult));
-            retainedOperator = null;
+            return number + digit;
         }
+        return number;
     }
+
+    private double getDoubleFromString(String currentDisplayedValue) {
+        return Double.parseDouble(currentDisplayedValue);
+    }
+
 }

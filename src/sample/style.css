@@ -1,5 +1,6 @@
 .numbers {
     -fx-font-size: 13pt;
+    -fx-font-weight: bold;
     -fx-pref-height: 60px;
     -fx-pref-width: 60px;
     -fx-focus-traversable: false;
