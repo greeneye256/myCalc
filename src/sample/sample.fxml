@@ -13,9 +13,9 @@
     <TextArea fx:id="result" styleClass="textArea" minHeight="80" minWidth="280" maxHeight="80" maxWidth="280" mouseTransparent="true" focusTraversable="false" editable="false">0</TextArea>
     <GridPane alignment="CENTER">
         <Button onAction="#equations" GridPane.columnIndex="1" GridPane.rowIndex="1">%</Button>
-        <Button GridPane.columnIndex="2" GridPane.rowIndex="1">CE</Button>
+        <Button onAction="#equations" GridPane.columnIndex="2" GridPane.rowIndex="1">CE</Button>
         <Button onAction="#equations" GridPane.columnIndex="3" GridPane.rowIndex="1">C</Button>
-        <Button GridPane.columnIndex="4" GridPane.rowIndex="1">⌫</Button>
+        <Button onAction="#equations" GridPane.columnIndex="4" GridPane.rowIndex="1">⌫</Button>
         <Button onAction="#equations" GridPane.columnIndex="1" GridPane.rowIndex="2">1/x</Button>
         <Button onAction="#equations" GridPane.columnIndex="2" GridPane.rowIndex="2">x^2</Button>
         <Button onAction="#equations" GridPane.columnIndex="3" GridPane.rowIndex="2">√x</Button>
